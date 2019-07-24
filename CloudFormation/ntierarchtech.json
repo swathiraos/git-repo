@@ -1,37 +1,83 @@
 {
-    "AwsTemplateFormatVersion" : "2010-09-09",
+    "AWSTemplateFormatVersion" : "2010-09-09",
     "Description" : "creating ntier architecture",
-    "Resources":{
-        "ntier":
+    "Resources" : {
+        "ntier" :
         {
-           "Type": "AWS::EC2::VPC",
-           "Properties":{
-               "cidrBlock": "192.168.0.0/16",
-               "EnableDnsHostNames": "true",
-               "InstanceTenancy": "default",
-               "Tags":{
-                   "Key": "Name",
-                   "Value":"ntiervc"
-               }
+           "Type" : "AWS::EC2::VPC",
+           "Properties" : {
+               "CidrBlock" : "192.168.0.0/16",
+               "EnableDnsHostnames" : true,
+               "InstanceTenancy" : "default",
+               "Tags" : [{
+                   "Key" : "Name",
+                   "Value" : "ntier"
+               }]
            }
 
         },
-        "dbsubnet":{
-            "Type":"AWS::EC2::Subnet",
-            "Properties": {
-                "AvailabilityZone": "us-west-2a",
-                "CidrBlock": "192.168.0.0/24",
-                "Tags":{
-                    "Key": "Name",
-                    "Value": "DBsunet"
-                },
+        "Websubnet" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "AvailabilityZone" : "us-west-2a",
+                "CidrBlock" : "192.168.0.0/24",
+                "Tags" : [{
+                    "Key" : "Name",
+                    "Value" : "DBsunet"
+                }],
                 "VpcId": {
                     "Ref" : "ntier"
                 }                 
 
             }
+        },
+        "appsubnet" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "AvailabilityZone" : "us-west-2b",
+                "CidrBlock" : "192.168.1.0/24",
+                "VpcId" : { "Ref" : "ntier" },
+                "Tags": [
+                    {
+                        "Key" : "Name",
+                        "Value" : "AppSubnet"
+
+                    }
+                ]
+            }
+        },
+        "DBSubnet":{
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "CidrBlock" : "192.168.2.0/24",
+                "AvailabilityZone" : "us-west-2c",
+                "VpcId" :{
+                "Ref" : "ntier"
+                },
+                "Tags" : [
+                {
+                    "Key" : "Name",
+                    "Value" : "DBSubnet"
+                }
+            ]
+            }         
+        },
+        "AdminSubnet" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "CidrBlock" : "192.168.3.0/24",
+                "AvailabilityZone" : "us-west-2d",
+                "VpcId": {
+                    "Ref" : "ntier"
+                },
+                "Tags" : [
+                    {
+                        "Key" : "Name",
+                        "Value" : "AdminSubnet"
+                    }
+                ]
+
+            }
         }
-        
     }
-    
 }
