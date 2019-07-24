@@ -1,0 +1,37 @@
+{
+    "AwsTemplateFormatVersion" : "2010-09-09",
+    "Description" : "creating ntier architecture",
+    "Resources":{
+        "ntier":
+        {
+           "Type": "AWS::EC2::VPC",
+           "Properties":{
+               "cidrBlock": "192.168.0.0/16",
+               "EnableDnsHostNames": "true",
+               "InstanceTenancy": "default",
+               "Tags":{
+                   "Key": "Name",
+                   "Value":"ntiervc"
+               }
+           }
+
+        },
+        "dbsubnet":{
+            "Type":"AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "us-west-2a",
+                "CidrBlock": "192.168.0.0/24",
+                "Tags":{
+                    "Key": "Name",
+                    "Value": "DBsunet"
+                },
+                "VpcId": {
+                    "Ref" : "ntier"
+                }                 
+
+            }
+        }
+        
+    }
+    
+}
